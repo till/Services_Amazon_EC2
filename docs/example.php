@@ -11,12 +11,10 @@ $manager = new Services_Amazon_EC2_InstanceManager(
 );
 
 $runner = $manager->getRunner($amazon_machine_image);
-$runner->setNumber($num);
-$runner->setUserData($data);
-$instances = $runner->runInstances();
+$runner->setNumber($num)->setUserData($data)->runInstances();
 
 foreach ($instances as $instance) {
-    echo $instance->getId(), "\n";
+    echo $instance->getId() . "\n";
 }
 
 $manager->terminateInstances($instances);
