@@ -124,8 +124,9 @@ class Services_Amazon_EC2_InstanceRunner extends
      */
     public function runInstances()
     {
-        $params = $this->getParameters();
+        $params   = $this->getParameters();
         $response = $this->sendRequest($params);
+
         $xpath = $response->getXPath();
         $node  = $xpath->query('//ec2:RunInstancesResponse')->item(0);
         return $this->parseReservationInfoType($node, $xpath);
@@ -144,7 +145,7 @@ class Services_Amazon_EC2_InstanceRunner extends
      * @param integer $max optional. The maximum number of instances to launch.
      *                     If not specified, defaults to <kbd>$min</kbd>.
      *
-     * @return void
+     * @return Services_Amazon_EC2_InstanceRunner
      */
     public function setNumber($min, $max = 0)
     {
@@ -157,6 +158,8 @@ class Services_Amazon_EC2_InstanceRunner extends
 
         $this->parameters['MinCount'] = $min;
         $this->parameters['MaxCount'] = max($max, $min);
+
+        return $this;
     }
 
     // }}}
@@ -169,11 +172,13 @@ class Services_Amazon_EC2_InstanceRunner extends
      * @param string $keyName the name of the key-pair with which to launch the
      *                        instances.
      *
-     * @return void
+     * @return Services_Amazon_EC2_InstanceRunner
      */
     public function setKeyName($keyPairName)
     {
         $this->parameters['KeyName'] = strval($keyName);
+
+        return $this;
     }
 
     // }}}
@@ -189,7 +194,7 @@ class Services_Amazon_EC2_InstanceRunner extends
      *                      security group is required for a particular launched
      *                      instance.
      *
-     * @return void
+     * @return Services_Amazon_EC2_InstanceRunner
      */
     public function setSecurityGroups(array $groups)
     {
@@ -208,6 +213,7 @@ class Services_Amazon_EC2_InstanceRunner extends
 
             $this->parameters['SecurityGroup.' . $key] = strval($group);
         }
+        return $this;
     }
 
     // }}}
@@ -220,7 +226,7 @@ class Services_Amazon_EC2_InstanceRunner extends
      * @param string $data user-specified data that is retrievable by launched
      *                     instances. Limited to 16000 bytes.
      *
-     * @return void
+     * @return Services_Amazon_EC2_InstanceRunner
      */
     public function setUserData($data)
     {
@@ -240,6 +246,8 @@ class Services_Amazon_EC2_InstanceRunner extends
         }
 
         $this->parameters['UserData'] = base64_encode($data);
+
+        return $this;
     }
 
     // }}}
@@ -253,7 +261,8 @@ class Services_Amazon_EC2_InstanceRunner extends
      *                     constants defined in
      *                     {@link Services_Amazon_EC2_Instance}.
      *
-     * @return void
+     * @return Services_Amazon_EC2_InstanceRunner
+     * @throws InvalidArgumentException In case an invalid type was specified.
      */
     public function setType($type)
     {
@@ -272,6 +281,8 @@ class Services_Amazon_EC2_InstanceRunner extends
         }
 
         $this->parameters['InstanceType'] = $type;
+
+        return $this;
     }
 
     // }}}
@@ -281,11 +292,13 @@ class Services_Amazon_EC2_InstanceRunner extends
      * @param string $zone the availability zone in which to launch the
      *                     instances.
      *
-     * @return void
+     * @return Services_Amazon_EC2_InstanceRunner
      */
     public function setPlacementAvailabilityZone($zone)
     {
         $this->parameters['Placement.AvailabilityZone'] = strval($zone);
+
+        return $this;
     }
 
     // }}}
@@ -295,11 +308,13 @@ class Services_Amazon_EC2_InstanceRunner extends
      * @param string $kernelId the kernel identifier with which to launch the
      *                         instances.
      *
-     * @return void
+     * @return Services_Amazon_EC2_InstanceRunner
      */
     public function setKernelId($kernelId)
     {
         $this->parameters['KernelId'] = strval($kernelId);
+
+        return $this;
     }
 
     // }}}
@@ -348,7 +363,10 @@ class Services_Amazon_EC2_InstanceRunner extends
      *                        is the device name and the array value is the
      *                        mapped virtual name.
      *
-     * @return void
+     * @return Services_Amazon_EC2_InstanceRunner
+     * @throws InvalidArgumentException On non-numeric array keys.
+     * @throws InvalidArgumentException If the $mappings array doesn't start at 0.
+     * @throws InvalidArgumentException If the value is not a single element array.
      */
     public function setBlockDeviceMappings(array $mappings)
     {
@@ -377,15 +395,18 @@ class Services_Amazon_EC2_InstanceRunner extends
             $this->parameters['BlockDeviceMapping.' . $key . '.DeviceName'] =
                 strval(reset($mapping));
         }
+
+        return $this;
     }
 
     // }}}
     // {{{ setImage()
 
     /**
-     * @var string|Services_Amazon_EC2_Image $image
+     * @param string|Services_Amazon_EC2_Image $image
      *
-     * @return void
+     * @return Services_Amazon_EC2_InstanceRunner
+     * @throws InvalidArgumentException On wrong $image argument.
      */
     protected function setImage($image)
     {
@@ -398,6 +419,8 @@ class Services_Amazon_EC2_InstanceRunner extends
         }
 
         $this->parameters['ImageId'] = strval($image);
+
+        return $this;
     }
 
     // }}}
