@@ -10,8 +10,8 @@ $manager = new Services_Amazon_EC2_InstanceManager(
     $access_key_secret
 );
 
-$runner = $manager->getRunner($amazon_machine_image);
-$runner->setNumber($num)->setUserData($data)->runInstances();
+$runner    = $manager->getRunner($amazon_machine_image); // define
+$instances = $runner->setNumber($num)->setUserData($data)->runInstances(); // define $num and $data
 
 foreach ($instances as $instance) {
     echo $instance->getId() . "\n";
