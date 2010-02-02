@@ -157,7 +157,7 @@ class Services_Amazon_EC2_Instance extends Services_Amazon_EC2
     /**
      * @var array
      */
-    protected $groups = array();
+    protected $securityGroups = array();
 
     /**
      * @var string
@@ -391,7 +391,7 @@ class Services_Amazon_EC2_Instance extends Services_Amazon_EC2
      */
     public function getSecurityGroups()
     {
-        return $this->groups;
+        return $this->securityGroups;
     }
 
     // }}}
