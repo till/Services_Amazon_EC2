@@ -127,6 +127,8 @@ class Services_Amazon_EC2_InstanceManager extends
         }
 
         $response  = $this->sendRequest($params);
+
+
         $xpath     = $response->getXPath();
         $nodes     = $xpath->query('//ec2:reservationSet/ec2:item');
 
