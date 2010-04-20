@@ -174,7 +174,7 @@ class Services_Amazon_EC2_InstanceRunner extends
      *
      * @return Services_Amazon_EC2_InstanceRunner
      */
-    public function setKeyName($keyPairName)
+    public function setKeyName($keyName)
     {
         $this->parameters['KeyName'] = strval($keyName);
 
@@ -185,6 +185,13 @@ class Services_Amazon_EC2_InstanceRunner extends
     // {{{ setSecurityGroups()
 
     /**
+     * Set security groups, an easy example:
+     *
+     * <code>
+     *  $groups = array(1 => 'foo', 2 => 'bar');
+     *  $runner->setSecurityGroups($groups);
+     * </code>
+     *
      * @param array $groups the security groups to associate with launched
      *                      instances. The array keys should be numeric and
      *                      correspond to launched instances counting from 1.
@@ -199,7 +206,7 @@ class Services_Amazon_EC2_InstanceRunner extends
     public function setSecurityGroups(array $groups)
     {
         foreach ($groups as $key => $group) {
-            if (!ctype_digit($key)) {
+            if (!is_numeric($key)) {
                 throw new InvalidArgumentException(
                     'Security group array keys must be numeric. Key "' . $key .
                     '" is not allowed.');
