@@ -61,7 +61,7 @@ $package = new PEAR_PackageFileManager2();
 
 $package->setOptions(
     array(
-        'filelistgenerator'       => 'svn',
+        'filelistgenerator'       => 'file',
         'simpleoutput'            => true,
         'baseinstalldir'          => '/',
         'packagedirectory'        => './',
