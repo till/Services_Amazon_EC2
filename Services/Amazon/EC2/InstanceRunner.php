@@ -230,7 +230,10 @@ class Services_Amazon_EC2_InstanceRunner extends
      */
     public function setUserData($data)
     {
-        $data = strval($data);
+        $data = trim(strval($data));
+        if ($data == '') {
+            return $this;
+        }
 
         if (   extension_loaded('mbstring')
             && (ini_get('mbstring.func_overload') & 0x02) === 0x02
@@ -266,7 +269,7 @@ class Services_Amazon_EC2_InstanceRunner extends
      */
     public function setType($type)
     {
-        $validTypes = array(
+        static $validTypes = array(
             Services_Amazon_EC2_Instance::TYPE_SMALL,
             Services_Amazon_EC2_Instance::TYPE_LARGE,
             Services_Amazon_EC2_Instance::TYPE_EXTRA_LARGE,
@@ -296,7 +299,15 @@ class Services_Amazon_EC2_InstanceRunner extends
      */
     public function setPlacementAvailabilityZone($zone)
     {
-        $this->parameters['Placement.AvailabilityZone'] = strval($zone);
+        $zone = strval($zone);
+
+        $zones = new Services_Amazon_EC2_Zones;
+        if (!in_array($zone, $zones->getZones())) {
+            throw new InvalidArgumentException('Invalid zone specified. ' .
+                'See Services_Amazon_EC2_Zones');
+        } 
+
+        $this->parameters['Placement.AvailabilityZone'] = $zone;
 
         return $this;
     }
