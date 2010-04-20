@@ -258,7 +258,7 @@ abstract class Services_Amazon_EC2
             echo $name, ": ", $value, "\n";
         }
 
-        echo $httpResponse->getBody();*/
+        echo $httpResponse->getBody(); */
 
         $response = new Services_Amazon_EC2_Response($httpResponse);
 
