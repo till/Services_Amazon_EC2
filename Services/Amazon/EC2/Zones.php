@@ -54,6 +54,7 @@ class Services_Amazon_EC2_Zones
         'us-west' => array('us-west-1a', 'us-west-1b'),
         'eu-west' => array('eu-west-1a', 'eu-west-1b'),
     );
+
     /**
      * Creates a new account object used to authenticate actions for
      * Amazon Web Services
@@ -82,7 +83,11 @@ class Services_Amazon_EC2_Zones
      */
     public function getZones()
     {
-        return $this->availabilityZones;
+        $keep = array();
+        foreach ($this->availabilityZones as $region => $zones) {
+            $keep = array_merge($keep, $zones);
+        }
+        return $keep;
     }
 }
 ?>
